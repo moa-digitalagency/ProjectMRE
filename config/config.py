@@ -14,6 +14,9 @@ class Config:
     # Example format: postgresql://username:password@hostname:port/database_name
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
+    # Upload folder configuration
+    UPLOAD_FOLDER = os.path.join(basedir, '../statics/uploads')
+
 class DevelopmentConfig(Config):
     """Development configuration."""
     DEBUG = True
@@ -31,6 +34,7 @@ class TestingConfig(Config):
     """Testing configuration."""
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    WTF_CSRF_ENABLED = False
 
 config = {
     'development': DevelopmentConfig,
