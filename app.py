@@ -14,9 +14,16 @@ def create_app(config_name=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # Needs a secret key for session/flashing
+    if not app.config.get('SECRET_KEY'):
+        app.config['SECRET_KEY'] = 'dev-key-for-testing'
+
     # Register Blueprints
     from routes.main import main_bp
     app.register_blueprint(main_bp)
+
+    from routes.admin import admin_bp
+    app.register_blueprint(admin_bp)
 
     return app
 
