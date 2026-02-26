@@ -1,1 +1,103 @@
-/* Custom styles */
+        /* Custom Animations & Styles */
+        .fade-slide {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s;
+            transform: scale(1.05);
+        }
+        .fade-slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+
+        .glass-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .glass-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .glass-button-primary {
+            background: rgba(212, 175, 55, 0.8); /* Gold accent */
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-button-primary:hover {
+            background: rgba(212, 175, 55, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Enhanced Marrakech Color Motion */
+        @keyframes aurora-motion {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        .marrakech-color-motion {
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(226, 114, 91, 0.3), transparent 60%),
+                radial-gradient(circle at 80% 40%, rgba(212, 175, 55, 0.25), transparent 60%),
+                radial-gradient(circle at 50% 80%, rgba(184, 88, 51, 0.3), transparent 60%),
+                radial-gradient(circle at 10% 90%, rgba(139, 58, 58, 0.2), transparent 50%);
+            background-size: 150% 150%;
+            animation: aurora-motion 25s ease-in-out infinite alternate;
+            mix-blend-mode: overlay;
+        }
+
+        /* Floating Zellige Fragments */
+        @keyframes drift-zellige {
+            0% { transform: translateY(10vh) rotate(0deg) scale(0.8); opacity: 0; filter: blur(2px); }
+            25% { opacity: 0.4; filter: blur(0px); }
+            75% { opacity: 0.4; filter: blur(0px); }
+            100% { transform: translateY(-40vh) rotate(180deg) scale(1.2); opacity: 0; filter: blur(4px); }
+        }
+        .floating-zellige {
+            position: absolute;
+            animation: drift-zellige linear infinite;
+            color: rgba(212, 175, 55, 0.8);
+        }
+
+        /* Zellige Parallax Animation */
+        @keyframes zellige-pan-1 {
+            0% { transform: scale(1.05) translate(0, 0); }
+            50% { transform: scale(1.1) translate(-1%, -1%); }
+            100% { transform: scale(1.05) translate(0, 0); }
+        }
+        .zellige-layer-1 { animation: zellige-pan-1 50s linear infinite; }
+
+        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+
+        @keyframes float-dust {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.1; }
+            50% { transform: translateY(-30px) scale(1.5); opacity: 0.8; box-shadow: 0 0 8px rgba(212, 175, 55, 0.8); }
+        }
+        .dust-particle { animation: float-dust 6s ease-in-out infinite; }
+
+        .floating-orb {
+            animation: float-dust 8s ease-in-out infinite;
+            border-radius: 50%;
+            filter: blur(24px);
+        }
+
+        .text-shadow { text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .text-shadow-lg { text-shadow: 0 4px 15px rgba(0,0,0,0.5); }

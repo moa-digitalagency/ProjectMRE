@@ -5,111 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Village Seniors MRE - Marrakech</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom Animations & Styles */
-        .fade-slide {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s;
-            transform: scale(1.05);
-        }
-        .fade-slide.active {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1);
-        }
-
-        /* Glassmorphism Panel */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-        }
-
-        .glass-button {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .glass-button:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .glass-button-primary {
-            background: rgba(212, 175, 55, 0.8); /* Gold accent */
-            color: white;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .glass-button-primary:hover {
-            background: rgba(212, 175, 55, 1);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-        }
-
-        /* Enhanced Marrakech Color Motion */
-        @keyframes aurora-motion {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-        .marrakech-color-motion {
-            background-image:
-                radial-gradient(circle at 20% 30%, rgba(226, 114, 91, 0.3), transparent 60%),
-                radial-gradient(circle at 80% 40%, rgba(212, 175, 55, 0.25), transparent 60%),
-                radial-gradient(circle at 50% 80%, rgba(184, 88, 51, 0.3), transparent 60%),
-                radial-gradient(circle at 10% 90%, rgba(139, 58, 58, 0.2), transparent 50%);
-            background-size: 150% 150%;
-            animation: aurora-motion 25s ease-in-out infinite alternate;
-            mix-blend-mode: overlay;
-        }
-
-        /* Floating Zellige Fragments */
-        @keyframes drift-zellige {
-            0% { transform: translateY(10vh) rotate(0deg) scale(0.8); opacity: 0; filter: blur(2px); }
-            25% { opacity: 0.4; filter: blur(0px); }
-            75% { opacity: 0.4; filter: blur(0px); }
-            100% { transform: translateY(-40vh) rotate(180deg) scale(1.2); opacity: 0; filter: blur(4px); }
-        }
-        .floating-zellige {
-            position: absolute;
-            animation: drift-zellige linear infinite;
-            color: rgba(212, 175, 55, 0.8);
-        }
-
-        /* Zellige Parallax Animation */
-        @keyframes zellige-pan-1 {
-            0% { transform: scale(1.05) translate(0, 0); }
-            50% { transform: scale(1.1) translate(-1%, -1%); }
-            100% { transform: scale(1.05) translate(0, 0); }
-        }
-        .zellige-layer-1 { animation: zellige-pan-1 50s linear infinite; }
-
-        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
-
-        @keyframes float-dust {
-            0%, 100% { transform: translateY(0) scale(1); opacity: 0.1; }
-            50% { transform: translateY(-30px) scale(1.5); opacity: 0.8; box-shadow: 0 0 8px rgba(212, 175, 55, 0.8); }
-        }
-        .dust-particle { animation: float-dust 6s ease-in-out infinite; }
-
-        .floating-orb {
-            animation: float-dust 8s ease-in-out infinite;
-            border-radius: 50%;
-            filter: blur(24px);
-        }
-
-        .text-shadow { text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .text-shadow-lg { text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 </head>
 <body class="bg-gray-900 overflow-x-hidden font-sans text-gray-800 selection:bg-yellow-500 selection:text-white">
 
@@ -170,10 +67,9 @@
 
         <!-- Background Slider -->
         <div id="slider" class="absolute inset-0 z-0 bg-black">
-            <img src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&q=80&w=2000" class="fade-slide active absolute inset-0 w-full h-full object-cover opacity-80" alt="Vue d'ensemble des villas">
-            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2000" class="fade-slide absolute inset-0 w-full h-full object-cover opacity-80" alt="Clubhouse et vue Atlas">
-            <img src="https://images.unsplash.com/photo-1552084117-56a98a414520?auto=format&fit=crop&q=80&w=2000" class="fade-slide absolute inset-0 w-full h-full object-cover opacity-80" alt="Villas avec vue sur l'Atlas">
-            <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&q=80&w=2000" class="fade-slide absolute inset-0 w-full h-full object-cover opacity-80" alt="Entrée sécurisée">
+            {% for image in slider_images %}
+            <img src="{{ url_for('static', filename='img/' + image) }}" class="fade-slide {{ 'active' if loop.first else '' }} absolute inset-0 w-full h-full object-cover opacity-80" alt="Slider image {{ loop.index }}">
+            {% endfor %}
 
             <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-black/70 z-10"></div>
             <div class="absolute inset-0 bg-black/10 z-10 backdrop-blur-[2px]"></div>
@@ -252,7 +148,7 @@
         </div>
 
         <!-- Bottom Stats Glass Bar (Responsive Grid/Flex) -->
-        <div class="absolute bottom-16 md:bottom-20 lg:bottom-24 left-1/2 transform -translate-x-1/2 w-[95%] sm:w-[90%] md:w-[85%] max-w-5xl z-30">
+        <div class="relative md:absolute mt-8 mb-16 md:mt-0 md:mb-0 bottom-auto md:bottom-20 lg:bottom-24 left-auto md:left-1/2 transform-none md:transform md:-translate-x-1/2 w-[95%] sm:w-[90%] md:w-[85%] max-w-5xl z-30 mx-auto">
             <div class="glass-panel rounded-2xl md:rounded-full px-4 py-4 md:px-10 md:py-4 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6 md:gap-8 border border-white/20 shadow-[0_10px_40px_rgba(0,0,0,0.3)] bg-white/10 backdrop-blur-2xl">
 
                 <div class="flex items-center gap-3 md:gap-4 w-full sm:w-auto justify-start sm:justify-center">
@@ -373,7 +269,7 @@
 
             <!-- Image -->
             <div class="w-full lg:w-1/2 relative h-[350px] sm:h-[450px] lg:h-[600px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl group border border-white/10">
-                <img src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&q=80&w=1000" onerror="this.src='https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Cheminement dans le village senior">
+                <img src="{{ url_for('static', filename='img/section_1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Cheminement dans le village senior">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10 opacity-80"></div>
                 <div class="absolute inset-0 bg-orange-900/20 mix-blend-color-burn z-10"></div>
                 <div class="absolute inset-0 marrakech-color-motion opacity-70 z-10 pointer-events-none mix-blend-overlay"></div>
@@ -461,7 +357,7 @@
 
             <!-- Image -->
             <div class="w-full lg:w-[45%] relative h-[350px] sm:h-[450px] lg:h-[650px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] group border-4 md:border-[6px] border-white">
-                <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&q=80&w=1000" onerror="this.src='https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105 group-hover:-rotate-1" alt="Agencement des villas">
+                <img src="{{ url_for('static', filename='img/section_2.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105 group-hover:-rotate-1" alt="Agencement des villas">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent z-10"></div>
                 <div class="absolute inset-0 marrakech-color-motion opacity-50 z-10 pointer-events-none mix-blend-overlay"></div>
                 <div class="absolute inset-4 border border-white/40 rounded-2xl z-30 pointer-events-none mix-blend-overlay"></div>
@@ -532,7 +428,7 @@
 
             <!-- Image -->
             <div class="w-full lg:w-1/2 relative h-[350px] sm:h-[450px] lg:h-[600px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl group border border-white/10">
-                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1000" onerror="this.src='https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Salle de bain adaptée premium">
+                <img src="{{ url_for('static', filename='img/section_3.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Salle de bain adaptée premium">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10 opacity-80"></div>
                 <div class="absolute inset-0 marrakech-color-motion opacity-70 z-10 pointer-events-none mix-blend-overlay"></div>
                 <div class="absolute inset-4 border border-white/20 rounded-2xl z-30 pointer-events-none mix-blend-overlay"></div>
@@ -593,7 +489,7 @@
 
             <!-- Image -->
             <div class="w-full lg:w-[45%] relative h-[350px] sm:h-[450px] lg:h-[600px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] group border-4 md:border-[6px] border-white">
-                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1000" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" alt="Finitions premium">
+                <img src="{{ url_for('static', filename='img/section_4.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" alt="Finitions premium">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent z-10"></div>
                 <div class="absolute inset-0 marrakech-color-motion opacity-40 z-10 pointer-events-none mix-blend-overlay"></div>
                 <div class="absolute inset-4 border border-white/50 rounded-2xl z-30 pointer-events-none mix-blend-overlay"></div>
@@ -654,7 +550,7 @@
 
             <!-- Image -->
             <div class="w-full lg:w-[45%] relative h-[350px] sm:h-[450px] lg:h-[650px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl group border border-white/10">
-                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000" onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" alt="Perspective investissement">
+                <img src="{{ url_for('static', filename='img/section_5.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" alt="Perspective investissement">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10 opacity-90"></div>
                 <div class="absolute inset-0 marrakech-color-motion opacity-60 z-10 pointer-events-none mix-blend-overlay"></div>
                 <div class="absolute inset-4 border border-white/20 rounded-2xl z-30 pointer-events-none mix-blend-overlay"></div>
@@ -702,7 +598,7 @@
 
             <!-- Image -->
             <div class="w-full lg:w-[45%] relative h-[350px] sm:h-[450px] lg:h-[650px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-xl group border-4 md:border-[6px] border-white">
-                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1000" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" alt="Stratégie">
+                <img src="{{ url_for('static', filename='img/section_6.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" alt="Stratégie">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent z-10"></div>
                 <div class="absolute inset-4 border border-white/40 rounded-2xl z-30 pointer-events-none mix-blend-overlay"></div>
             </div>
@@ -768,7 +664,7 @@
 
             <!-- Image -->
             <div class="w-full lg:w-[45%] relative h-[350px] sm:h-[450px] lg:h-[600px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl group border border-white/10">
-                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=1000" onerror="this.src='https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Gouvernance et contrôle">
+                <img src="{{ url_for('static', filename='img/section_7.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Gouvernance et contrôle">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent z-10 opacity-80"></div>
                 <div class="absolute inset-4 border border-white/20 rounded-2xl z-30 pointer-events-none mix-blend-overlay"></div>
             </div>
@@ -827,7 +723,7 @@
 
             <!-- Image -->
             <div class="w-full lg:w-[45%] relative h-[350px] sm:h-[450px] lg:h-[650px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-xl group border-4 md:border-[6px] border-white">
-                <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&q=80&w=1000" onerror="this.src='https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" alt="Vision future">
+                <img src="{{ url_for('static', filename='img/section_8.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&q=80&w=1000'" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" alt="Vision future">
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent z-10"></div>
                 <div class="absolute inset-4 border border-white/40 rounded-2xl z-30 pointer-events-none mix-blend-overlay"></div>
             </div>
@@ -966,75 +862,5 @@
     </footer>
 
     <!-- Scripts (Slider & Mobile Menu) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Slider Logic
-            const slides = document.querySelectorAll('.fade-slide');
-            const dots = document.querySelectorAll('.slider-dot');
-            let currentSlide = 0;
-            const slideInterval = 5000;
-
-            function goToSlide(index) {
-                if(!slides.length) return;
-                slides[currentSlide].classList.remove('active');
-                dots[currentSlide].classList.remove('bg-white');
-                dots[currentSlide].classList.add('bg-white/30');
-
-                currentSlide = index;
-
-                slides[currentSlide].classList.add('active');
-                dots[currentSlide].classList.remove('bg-white/30');
-                dots[currentSlide].classList.add('bg-white');
-            }
-
-            function nextSlide() {
-                if(!slides.length) return;
-                let next = (currentSlide + 1) % slides.length;
-                goToSlide(next);
-            }
-
-            let sliderTimer = setInterval(nextSlide, slideInterval);
-
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    clearInterval(sliderTimer);
-                    goToSlide(index);
-                    sliderTimer = setInterval(nextSlide, slideInterval);
-                });
-            });
-
-            // Mobile Menu Logic
-            const menuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const iconOpen = document.getElementById('menu-icon-open');
-            const iconClose = document.getElementById('menu-icon-close');
-            const mobileLinks = document.querySelectorAll('.mobile-link');
-            let menuOpen = false;
-
-            function toggleMenu() {
-                menuOpen = !menuOpen;
-                if (menuOpen) {
-                    mobileMenu.classList.remove('translate-x-full');
-                    iconOpen.classList.add('hidden');
-                    iconClose.classList.remove('hidden');
-                    document.body.style.overflow = 'hidden'; // Empêche le scroll quand le menu est ouvert
-                } else {
-                    mobileMenu.classList.add('translate-x-full');
-                    iconOpen.classList.remove('hidden');
-                    iconClose.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }
-            }
-
-            menuBtn.addEventListener('click', toggleMenu);
-
-            // Fermer le menu au clic sur un lien
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (menuOpen) toggleMenu();
-                });
-            });
-        });
-    </script>
 </body>
 </html>
