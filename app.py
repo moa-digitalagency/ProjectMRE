@@ -25,6 +25,16 @@ def create_app(config_name=None):
     from routes.admin import admin_bp
     app.register_blueprint(admin_bp)
 
+    # Context Processor for Site Settings
+    from models.site_settings import SiteSettings
+    @app.context_processor
+    def inject_site_settings():
+        try:
+            site_settings = SiteSettings.query.first()
+        except:
+            site_settings = None
+        return dict(site_settings=site_settings)
+
     return app
 
 if __name__ == '__main__':
