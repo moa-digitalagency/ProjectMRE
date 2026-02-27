@@ -38,6 +38,7 @@ def update_section(id):
                  if os.path.exists(old_image_path):
                      os.remove(old_image_path)
 
+            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             section.image_url = f'uploads/{filename}'
             db.session.commit()
@@ -60,6 +61,7 @@ def add_slider_image():
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
+        os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
 
         alt_text = request.form.get('alt_text', '')
@@ -118,6 +120,7 @@ def update_settings():
         file = request.files['favicon']
         if file and allowed_file(file.filename):
             filename = secure_filename(f"favicon_{file.filename}")
+            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             settings.favicon_url = f'uploads/{filename}'
 
@@ -126,6 +129,7 @@ def update_settings():
         file = request.files['og_image']
         if file and allowed_file(file.filename):
             filename = secure_filename(f"og_{file.filename}")
+            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             settings.og_image_url = f'uploads/{filename}'
 

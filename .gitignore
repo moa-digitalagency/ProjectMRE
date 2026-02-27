@@ -13,3 +13,7 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+# Local databases and logs
+*.db
+*.log
