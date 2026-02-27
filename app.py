@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from config.config import config
 from utils.extensions import db, migrate
 
@@ -25,6 +25,27 @@ def create_app(config_name=None):
     from routes.admin import admin_bp
     app.register_blueprint(admin_bp)
 
+    # Error Handlers
+    @app.errorhandler(400)
+    def bad_request(e):
+        return render_template('error.html', error_code=400, error_message="Mauvaise requête"), 400
+
+    @app.errorhandler(401)
+    def unauthorized(e):
+        return render_template('error.html', error_code=401, error_message="Non autorisé"), 401
+
+    @app.errorhandler(403)
+    def forbidden(e):
+        return render_template('error.html', error_code=403, error_message="Accès interdit"), 403
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('error.html', error_code=404, error_message="Page non trouvée"), 404
+
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('error.html', error_code=500, error_message="Erreur interne du serveur"), 500
+
     # Context Processor for Site Settings
     from models.site_settings import SiteSettings
     @app.context_processor
@@ -33,6 +54,10 @@ def create_app(config_name=None):
             site_settings = SiteSettings.query.first()
         except:
             site_settings = None
+
+        if not site_settings:
+            site_settings = SiteSettings() # Ensure it's never None
+
         return dict(site_settings=site_settings)
 
     return app
