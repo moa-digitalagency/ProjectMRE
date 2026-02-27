@@ -63,7 +63,10 @@ def add_slider_image():
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
 
         alt_text = request.form.get('alt_text', '')
-        order = request.form.get('order', 0)
+        try:
+            order = int(request.form.get('order', 0))
+        except (ValueError, TypeError):
+            order = 0
 
         new_image = SliderImage(
             image_url=f'uploads/{filename}',

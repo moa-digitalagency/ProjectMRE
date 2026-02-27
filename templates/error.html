@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ error_code }} - {{ error_message }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-gray-900 text-white font-sans flex items-center justify-center min-h-screen">
+
+    <div class="glass-panel p-8 md:p-12 rounded-3xl text-center max-w-lg mx-4 border border-white/10 shadow-2xl relative overflow-hidden">
+
+        <!-- Background Elements -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+
+        <h1 class="text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-500 mb-4 tracking-tighter">
+            {{ error_code }}
+        </h1>
+
+        <div class="w-16 h-1 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full mx-auto mb-6"></div>
+
+        <h2 class="text-xl md:text-2xl font-bold text-white mb-4">
+            {{ error_message }}
+        </h2>
+
+        <p class="text-gray-300 mb-8 font-light">
+            Oups ! Il semble que vous ayez trouvé une impasse. Retournez au village pour retrouver votre chemin.
+        </p>
+
+        <a href="{{ url_for('main.index') }}" class="glass-button-primary px-8 py-3 rounded-full font-semibold transition duration-300 inline-flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Retour à l'accueil
+        </a>
+    </div>
+
+</body>
+</html>
