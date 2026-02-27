@@ -4,6 +4,7 @@ from models.user import User
 from models.project import Project
 from models.section import Section
 from models.slider_image import SliderImage
+from models.site_settings import SiteSettings
 
 # Initialize the Flask application
 app = create_app()
@@ -60,6 +61,21 @@ def init_db():
             print("Sections seeded.")
         else:
             print("Sections already exist.")
+
+        # Seed Site Settings
+        if SiteSettings.query.count() == 0:
+            print("Seeding Site Settings...")
+            default_settings = SiteSettings(
+                site_name="Mon Site Vitrine",
+                meta_title="Accueil - Mon Site Vitrine",
+                meta_description="Bienvenue sur notre site vitrine.",
+                favicon_url="img/favicon.svg"
+            )
+            db.session.add(default_settings)
+            db.session.commit()
+            print("Site Settings seeded.")
+        else:
+            print("Site Settings already exist.")
 
 
 if __name__ == '__main__':

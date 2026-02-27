@@ -3,11 +3,12 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from werkzeug.utils import secure_filename
 from models.section import Section
 from models.slider_image import SliderImage
+from models.site_settings import SiteSettings
 from utils.extensions import db
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico'}
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -17,7 +18,8 @@ def allowed_file(filename):
 def dashboard():
     sections = Section.query.all()
     slider_images = SliderImage.query.order_by(SliderImage.order).all()
-    return render_template('admin.html', sections=sections, slider_images=slider_images)
+    site_settings = SiteSettings.query.first()
+    return render_template('admin.html', sections=sections, slider_images=slider_images, site_settings=site_settings)
 
 @admin_bp.route('/section/update/<int:id>', methods=['POST'])
 def update_section(id):
@@ -90,4 +92,40 @@ def delete_slider_image(id):
     db.session.commit()
     flash('Slider image deleted successfully.', 'success')
 
+    return redirect(url_for('admin.dashboard'))
+
+@admin_bp.route('/settings/update', methods=['POST'])
+def update_settings():
+    settings = SiteSettings.query.first()
+    if not settings:
+        settings = SiteSettings()
+        db.session.add(settings)
+
+    settings.site_name = request.form.get('site_name')
+    settings.meta_title = request.form.get('meta_title')
+    settings.meta_description = request.form.get('meta_description')
+    settings.meta_keywords = request.form.get('meta_keywords')
+    settings.og_title = request.form.get('og_title')
+    settings.og_description = request.form.get('og_description')
+    settings.contact_email = request.form.get('contact_email')
+    settings.contact_phone = request.form.get('contact_phone')
+
+    # Handle Favicon
+    if 'favicon' in request.files:
+        file = request.files['favicon']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(f"favicon_{file.filename}")
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            settings.favicon_url = f'uploads/{filename}'
+
+    # Handle Open Graph Image
+    if 'og_image' in request.files:
+        file = request.files['og_image']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(f"og_{file.filename}")
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            settings.og_image_url = f'uploads/{filename}'
+
+    db.session.commit()
+    flash('Paramètres mis à jour avec succès.', 'success')
     return redirect(url_for('admin.dashboard'))

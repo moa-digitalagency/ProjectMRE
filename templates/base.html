@@ -3,7 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Site Vitrine{% endblock %}</title>
+
+    <!-- Dynamic Title -->
+    <title>{% block title %}{{ site_settings.meta_title or site_settings.site_name or 'Site Vitrine' }}{% endblock %}</title>
+
+    <!-- Meta Tags for SEO -->
+    {% if site_settings %}
+        {% if site_settings.meta_description %}
+        <meta name="description" content="{{ site_settings.meta_description }}">
+        {% endif %}
+        {% if site_settings.meta_keywords %}
+        <meta name="keywords" content="{{ site_settings.meta_keywords }}">
+        {% endif %}
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ request.url }}">
+        <meta property="og:title" content="{{ site_settings.og_title or site_settings.meta_title or site_settings.site_name }}">
+        {% if site_settings.og_description %}
+        <meta property="og:description" content="{{ site_settings.og_description }}">
+        {% endif %}
+        {% if site_settings.og_image_url %}
+        <meta property="og:image" content="{{ url_for('static', filename=site_settings.og_image_url, _external=True) }}">
+        {% endif %}
+
+        <!-- Favicon -->
+        {% if site_settings.favicon_url %}
+        <link rel="icon" href="{{ url_for('static', filename=site_settings.favicon_url) }}">
+        {% endif %}
+    {% endif %}
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -16,7 +45,7 @@
                     <div>
                         <!-- Website Logo -->
                         <a href="{{ url_for('main.index') }}" class="flex items-center py-4 px-2">
-                            <span class="font-semibold text-gray-500 text-lg">Mon Site</span>
+                            <span class="font-semibold text-gray-500 text-lg">{{ site_settings.site_name or 'Mon Site' }}</span>
                         </a>
                     </div>
                 </div>
@@ -44,7 +73,11 @@
     </main>
 
     <footer class="bg-gray-200 mt-12 py-6 text-center">
-        <p class="text-gray-600">© 2023 Mon Site Vitrine. Tous droits réservés.</p>
+        <p class="text-gray-600">
+            © 2023 {{ site_settings.site_name or 'Mon Site Vitrine' }}. Tous droits réservés.
+            {% if site_settings.contact_email %} | <a href="mailto:{{ site_settings.contact_email }}" class="text-blue-600 hover:underline">{{ site_settings.contact_email }}</a>{% endif %}
+            {% if site_settings.contact_phone %} | {{ site_settings.contact_phone }}{% endif %}
+        </p>
     </footer>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>

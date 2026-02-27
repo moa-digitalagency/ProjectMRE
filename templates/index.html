@@ -3,7 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Village Seniors MRE - Marrakech</title>
+
+    <!-- Dynamic Title -->
+    <title>{{ site_settings.meta_title or site_settings.site_name or 'Village Seniors MRE - Marrakech' }}</title>
+
+    <!-- Meta Tags for SEO -->
+    {% if site_settings %}
+        {% if site_settings.meta_description %}
+        <meta name="description" content="{{ site_settings.meta_description }}">
+        {% endif %}
+        {% if site_settings.meta_keywords %}
+        <meta name="keywords" content="{{ site_settings.meta_keywords }}">
+        {% endif %}
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ request.url }}">
+        <meta property="og:title" content="{{ site_settings.og_title or site_settings.meta_title or site_settings.site_name }}">
+        {% if site_settings.og_description %}
+        <meta property="og:description" content="{{ site_settings.og_description }}">
+        {% endif %}
+        {% if site_settings.og_image_url %}
+        <meta property="og:image" content="{{ url_for('static', filename=site_settings.og_image_url, _external=True) }}">
+        {% endif %}
+
+        <!-- Favicon -->
+        {% if site_settings.favicon_url %}
+        <link rel="icon" href="{{ url_for('static', filename=site_settings.favicon_url) }}">
+        {% endif %}
+    {% endif %}
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -18,7 +47,7 @@
                     <span class="text-white font-bold text-xl md:text-2xl">M</span>
                 </div>
                 <div>
-                    <h2 class="text-white font-bold text-base md:text-lg leading-tight tracking-wide text-shadow">Village Seniors</h2>
+                    <h2 class="text-white font-bold text-base md:text-lg leading-tight tracking-wide text-shadow">{{ site_settings.site_name or 'Village Seniors' }}</h2>
                     <p class="text-yellow-400 text-[9px] md:text-[10px] font-semibold uppercase tracking-widest">Marrakech</p>
                 </div>
             </div>
@@ -838,13 +867,13 @@
 
                     <div class="space-y-4 w-full max-w-md">
                         <!-- Phone -->
-                        <a href="tel:+21268060352" class="flex items-center gap-4 text-gray-300 hover:text-white transition-all group p-2 rounded-xl hover:bg-white/5">
+                        <a href="tel:{{ site_settings.contact_phone or '+21268060352' }}" class="flex items-center gap-4 text-gray-300 hover:text-white transition-all group p-2 rounded-xl hover:bg-white/5">
                             <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                             </div>
                             <div>
                                 <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wider font-semibold mb-0.5">Téléphone direct</p>
-                                <span class="font-bold text-base sm:text-lg tracking-wide">+212 6 80 6 03 52</span>
+                                <span class="font-bold text-base sm:text-lg tracking-wide">{{ site_settings.contact_phone or '+212 6 80 6 03 52' }}</span>
                             </div>
                         </a>
 
@@ -860,13 +889,13 @@
                         </a>
 
                         <!-- Email -->
-                        <a href="mailto:shabakainvestgroup@gmail.com" class="flex items-center gap-4 text-gray-300 hover:text-white transition-all group p-2 rounded-xl hover:bg-white/5 break-all sm:break-normal">
+                        <a href="mailto:{{ site_settings.contact_email or 'shabakainvestgroup@gmail.com' }}" class="flex items-center gap-4 text-gray-300 hover:text-white transition-all group p-2 rounded-xl hover:bg-white/5 break-all sm:break-normal">
                             <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 text-orange-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                             </div>
                             <div class="overflow-hidden w-full">
                                 <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wider font-semibold mb-0.5">Courriel</p>
-                                <span class="font-medium text-sm sm:text-base block truncate">shabakainvestgroup@gmail.com</span>
+                                <span class="font-medium text-sm sm:text-base block truncate">{{ site_settings.contact_email or 'shabakainvestgroup@gmail.com' }}</span>
                             </div>
                         </a>
 
