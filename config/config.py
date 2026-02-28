@@ -10,6 +10,9 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev_secret_key')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # Restrict maximum upload size to 5MB to prevent memory exhaustion
+    MAX_CONTENT_LENGTH = 5 * 1024 * 1024
+
     # PostgreSQL database configuration
     # Example format: postgresql://username:password@hostname:port/database_name
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')

@@ -12,3 +12,5 @@ pytest
 python-dotenv
 werkzeug
 uuid
+Pillow
+Flask-Caching

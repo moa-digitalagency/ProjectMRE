@@ -1,7 +1,16 @@
 import os
 from flask import Flask, render_template
+from flask_caching import Cache
 from config.config import config
 from utils.extensions import db, migrate
+
+# Initialize Cache using FileSystemCache to support multiple workers
+cache_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'cache')
+cache = Cache(config={
+    'CACHE_TYPE': 'FileSystemCache',
+    'CACHE_DIR': cache_dir,
+    'CACHE_DEFAULT_TIMEOUT': 300
+})
 
 def create_app(config_name=None):
     if config_name is None:
@@ -13,6 +22,7 @@ def create_app(config_name=None):
     # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    cache.init_app(app)
 
     # Needs a secret key for session/flashing
     if not app.config.get('SECRET_KEY'):
@@ -48,15 +58,20 @@ def create_app(config_name=None):
 
     # Context Processor for Site Settings
     from models.site_settings import SiteSettings
+
     @app.context_processor
     def inject_site_settings():
-        try:
-            site_settings = SiteSettings.query.first()
-        except:
-            site_settings = None
+        site_settings = cache.get('site_settings')
+        if site_settings is None:
+            try:
+                site_settings = SiteSettings.query.first()
+            except:
+                site_settings = None
 
-        if not site_settings:
-            site_settings = SiteSettings() # Ensure it's never None
+            if not site_settings:
+                site_settings = SiteSettings() # Ensure it's never None
+
+            cache.set('site_settings', site_settings)
 
         return dict(site_settings=site_settings)
 

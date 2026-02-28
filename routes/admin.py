@@ -1,10 +1,12 @@
 import os
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from werkzeug.utils import secure_filename
+from PIL import Image
 from models.section import Section
 from models.slider_image import SliderImage
 from models.site_settings import SiteSettings
 from utils.extensions import db
+from app import cache
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -13,6 +15,53 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico'}
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def process_and_save_image(file_storage, filename):
+    """
+    Saves an uploaded image. If it's an image that can be optimized (jpg, png, etc.),
+    it resizes it to a max of 1920x1080 and converts it to WebP.
+    SVG and ICO files are saved as is.
+    Returns the final filename saved.
+    """
+    os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+    ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
+    if ext in ['svg', 'ico', 'gif']:
+        # Save as is for vector/animated/icon formats
+        final_filename = filename
+        save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], final_filename)
+        file_storage.save(save_path)
+        return final_filename
+
+    # Process image with Pillow
+    try:
+        img = Image.open(file_storage)
+
+        # Convert P to RGBA to preserve transparency, but do not convert RGBA to RGB
+        # as WebP natively supports alpha channels.
+        if img.mode == "P":
+            img = img.convert("RGBA")
+        elif img.mode not in ("RGB", "RGBA"):
+            img = img.convert("RGBA")
+
+        # Resize if larger than 1920x1080 while maintaining aspect ratio
+        img.thumbnail((1920, 1080), Image.Resampling.LANCZOS)
+
+        # Change filename to .webp
+        name_without_ext = filename.rsplit('.', 1)[0]
+        final_filename = f"{name_without_ext}.webp"
+        save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], final_filename)
+
+        # Save compressed WebP
+        img.save(save_path, 'WEBP', quality=85, optimize=True)
+        return final_filename
+    except Exception as e:
+        # Fallback to saving original if processing fails
+        print(f"Error processing image {filename}: {e}")
+        save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        file_storage.seek(0) # Reset file pointer just in case
+        file_storage.save(save_path)
+        return filename
 
 @admin_bp.route('/')
 def dashboard():
@@ -38,9 +87,8 @@ def update_section(id):
                  if os.path.exists(old_image_path):
                      os.remove(old_image_path)
 
-            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            section.image_url = f'uploads/{filename}'
+            saved_filename = process_and_save_image(file, filename)
+            section.image_url = f'uploads/{saved_filename}'
             db.session.commit()
             flash('Image updated successfully.', 'success')
         elif file.filename != '':
@@ -61,8 +109,7 @@ def add_slider_image():
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
-        file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+        saved_filename = process_and_save_image(file, filename)
 
         alt_text = request.form.get('alt_text', '')
         try:
@@ -71,7 +118,7 @@ def add_slider_image():
             order = 0
 
         new_image = SliderImage(
-            image_url=f'uploads/{filename}',
+            image_url=f'uploads/{saved_filename}',
             alt_text=alt_text,
             order=order
         )
@@ -120,19 +167,19 @@ def update_settings():
         file = request.files['favicon']
         if file and allowed_file(file.filename):
             filename = secure_filename(f"favicon_{file.filename}")
-            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            settings.favicon_url = f'uploads/{filename}'
+            saved_filename = process_and_save_image(file, filename)
+            settings.favicon_url = f'uploads/{saved_filename}'
 
     # Handle Open Graph Image
     if 'og_image' in request.files:
         file = request.files['og_image']
         if file and allowed_file(file.filename):
             filename = secure_filename(f"og_{file.filename}")
-            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            settings.og_image_url = f'uploads/{filename}'
+            saved_filename = process_and_save_image(file, filename)
+            settings.og_image_url = f'uploads/{saved_filename}'
 
     db.session.commit()
+    # Invalidate cached settings
+    cache.delete('site_settings')
     flash('Paramètres mis à jour avec succès.', 'success')
     return redirect(url_for('admin.dashboard'))
