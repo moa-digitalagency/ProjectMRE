@@ -2,7 +2,24 @@ from playwright.sync_api import sync_playwright, expect
 import os
 import re
 
+from PIL import Image
+
+def generate_test_images():
+    if not os.path.exists("test_assets"):
+        os.makedirs("test_assets")
+
+    # Create test_slider.jpg
+    img1 = Image.new('RGB', (800, 600), color='red')
+    img1.save("test_assets/test_slider.jpg")
+
+    # Create test_section.jpg
+    img2 = Image.new('RGB', (800, 600), color='blue')
+    img2.save("test_assets/test_section.jpg")
+
 def run_tests():
+    # Generate test images before running tests
+    generate_test_images()
+
     # Ensure screenshots are saved in the current directory
     current_dir = os.getcwd()
 
@@ -142,7 +159,7 @@ def run_tests():
             contexte_img = contexte_section.locator("img")
 
             # Use regex for substring match
-            expect(contexte_img).to_have_attribute("src", re.compile(r"test_section\.jpg"))
+            expect(contexte_img).to_have_attribute("src", re.compile(r"test_section\.(jpg|webp)"))
 
             # Take targeted screenshot of the section
             # We can element.screenshot()
