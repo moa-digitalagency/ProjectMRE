@@ -17,3 +17,4 @@ build/
 # Local databases and logs
 *.db
 *.log
+cache/
