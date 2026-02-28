@@ -6,11 +6,37 @@ from models.section import Section
 from models.slider_image import SliderImage
 from models.site_settings import SiteSettings
 
+import os
+
 # Initialize the Flask application
 app = create_app()
 
 def init_db():
     """Initializes the database with tables and necessary columns."""
+
+    # Create required directories for the application to function
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+
+    # Create cache directory
+    cache_dir = os.path.join(base_dir, 'cache')
+    if not os.path.exists(cache_dir):
+        os.makedirs(cache_dir, exist_ok=True)
+        print(f"Created cache directory at {cache_dir}")
+        try:
+            os.chmod(cache_dir, 0o775)
+        except PermissionError:
+            print("Warning: Could not set 775 permissions on cache directory")
+
+    # Create uploads directory
+    uploads_dir = os.path.join(base_dir, 'statics', 'uploads')
+    if not os.path.exists(uploads_dir):
+        os.makedirs(uploads_dir, exist_ok=True)
+        print(f"Created uploads directory at {uploads_dir}")
+        try:
+            os.chmod(uploads_dir, 0o775)
+        except PermissionError:
+            print("Warning: Could not set 775 permissions on uploads directory")
+
     with app.app_context():
         # Create all tables defined in models
         db.create_all()
