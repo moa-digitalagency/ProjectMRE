@@ -18,3 +18,11 @@ build/
 *.db
 *.log
 cache/
+
+# Test artifacts
+test_assets/
+statics/uploads/test_*.jpg
+statics/uploads/test_*.webp
+debug_step_*.png
+test_*.png
+etape_*.png
